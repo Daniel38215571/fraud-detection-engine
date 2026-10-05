@@ -37,7 +37,6 @@ def train():
         n_estimators=200,
         max_depth=12,
         min_samples_leaf=5,
-        class_weight="balanced",
         random_state=42,
         n_jobs=-1,
     )
@@ -55,37 +54,26 @@ def train():
         "fraud_in_test": int(y_test.sum()),
     }
 
-    print("Model trained.")
-    print()
-    print("Test set size: " + str(metrics["test_size"]))
-    print("Fraud cases in test set: " + str(metrics["fraud_in_test"]))
+    print("Model retrained without class weights.")
     print()
     print("Precision: " + str(metrics["precision"]))
     print("Recall:    " + str(metrics["recall"]))
     print("F1:        " + str(metrics["f1"]))
     print("AUC-ROC:   " + str(metrics["auc_roc"]))
     print()
-    print("Classification report:")
     print(classification_report(y_test, y_pred, target_names=["Legitimate", "Fraud"]))
-    print("Confusion matrix:")
     print(confusion_matrix(y_test, y_pred))
-    print()
-    print("Feature importances:")
-    for name, importance in sorted(
-        zip(FEATURE_COLS, model.feature_importances_),
-        key=lambda x: -x[1],
-    ):
-        print("  " + name.ljust(20) + ": " + str(round(importance, 4)))
 
     joblib.dump(model, BASE + "/src/fraud_model.pkl")
     with open(BASE + "/data/metrics.json", "w") as f:
         json.dump(metrics, f, indent=2)
 
     print()
-    print("Model saved to src/fraud_model.pkl")
-    print("Metrics saved to data/metrics.json")
-
-    return model, metrics
+    print("Model saved.")
+    print()
+    print("Probability samples:")
+    print("  Normal transaction (all signals low): " + str(round(float(model.predict_proba([[1.1, 1, 5, 0, 0]])[0][1]), 4)))
+    print("  Obvious fraud (all signals high):     " + str(round(float(model.predict_proba([[42.0, 12, 850, 8, 1]])[0][1]), 4)))
 
 if __name__ == "__main__":
     train()

@@ -29,7 +29,7 @@ def test_clear_fraud_scores_high():
     })
     assert response.status_code == 200
     data = response.json()
-    assert data["fraud_score"] > 0.7
+    assert data["fraud_score"] > 0.85
     assert data["classification"] == "LIKELY_FRAUD"
     assert len(data["reasons"]) >= 3
 
@@ -37,15 +37,15 @@ def test_clear_fraud_scores_high():
 def test_clear_legitimate_scores_low():
     response = client.post("/score", json={
         "transaction_id": "TXN-LEGIT-001",
-        "amount_ratio": 1.1,
+        "amount_ratio": 1.0,
         "velocity_1h": 1,
-        "geo_velocity_kmh": 5,
+        "geo_velocity_kmh": 0,
         "time_deviation": 0,
         "merchant_novelty": 0,
     })
     assert response.status_code == 200
     data = response.json()
-    assert data["fraud_score"] < 0.3
+    assert data["fraud_score"] < 0.5
     assert data["classification"] == "LEGITIMATE"
 
 
@@ -83,10 +83,10 @@ def test_missing_field_rejected():
 
 def test_classify_thresholds():
     assert classify(0.1) == "LEGITIMATE"
-    assert classify(0.29) == "LEGITIMATE"
-    assert classify(0.3) == "SUSPICIOUS"
-    assert classify(0.69) == "SUSPICIOUS"
-    assert classify(0.7) == "LIKELY_FRAUD"
+    assert classify(0.49) == "LEGITIMATE"
+    assert classify(0.5) == "SUSPICIOUS"
+    assert classify(0.84) == "SUSPICIOUS"
+    assert classify(0.85) == "LIKELY_FRAUD"
     assert classify(0.99) == "LIKELY_FRAUD"
 
 

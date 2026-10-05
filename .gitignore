@@ -1,4 +1,6 @@
 __pycache__/
 *.pyc
-.pytest_cache/
-.ipynb_checkpoints/
+*.pkl
+*.zip
+.env
+.DS_Store
