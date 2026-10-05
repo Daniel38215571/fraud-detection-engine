@@ -88,3 +88,17 @@ Software Engineer | Fintech & ML
 - LinkedIn: linkedin.com/in/daniel-ojo-879273197
 - Email: ojodaniel38@gmail.com
 - Location: Lagos, Nigeria (Remote-ready)
+
+## Known Limitations
+
+During diagnostic testing, two model gaps were identified:
+
+- **Velocity Burst First-Transaction Blind Spot:** The model achieves 100% recall on subsequent transactions in a velocity burst, but consistently misses the *first* transaction of the burst (mean score: 0.23). This is because the first transaction looks normal on its own—it lacks the temporal context of the rapid transactions that follow.
+- **Inactive Merchant Novelty Feature:** The `merchant_novelty` feature is currently outputting all zeros (mean: 0.0, std: 0.0), meaning the model is not learning any signal from merchant-level novelty. This needs to be fixed in the feature engineering pipeline.
+
+## Next Steps
+
+1. Fix the `merchant_novelty` feature in `src/features.py`.
+2. Engineer a "burst-start" feature that flags the first transaction of a rapid sequence.
+3. Add sequence-based modeling (e.g., LSTM) to capture temporal anomalies.
+4. Add additional tests for edge cases.
