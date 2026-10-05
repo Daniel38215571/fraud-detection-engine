@@ -91,14 +91,14 @@ Software Engineer | Fintech & ML
 
 ## Known Limitations
 
-During diagnostic testing, two model gaps were identified:
+During diagnostic testing, two limitations were identified:
 
-- **Velocity Burst First-Transaction Blind Spot:** The model achieves 100% recall on subsequent transactions in a velocity burst, but consistently misses the *first* transaction of the burst (mean score: 0.23). This is because the first transaction looks normal on its own—it lacks the temporal context of the rapid transactions that follow.
-- **Inactive Merchant Novelty Feature:** The `merchant_novelty` feature is currently outputting all zeros (mean: 0.0, std: 0.0), meaning the model is not learning any signal from merchant-level novelty. This needs to be fixed in the feature engineering pipeline.
+- **Velocity Burst First-Transaction Blind Spot:** The model achieves 100% recall on subsequent transactions within a velocity burst but consistently misses the first transaction of the burst (mean score: 0.23). This occurs because the first transaction appears normal in isolation and does not yet contain the temporal context created by the subsequent rapid transactions.
+- **Inactive Merchant Novelty Feature:** The `merchant_novelty` feature is currently producing all-zero values (mean: 0.0, std: 0.0), indicating that the feature is not contributing meaningful signal to the model. This points to an issue in the feature-engineering pipeline rather than necessarily a limitation of the model itself.
 
-## Next Steps
+## Future Enhancements
 
-1. Fix the `merchant_novelty` feature in `src/features.py`.
-2. Engineer a "burst-start" feature that flags the first transaction of a rapid sequence.
-3. Add sequence-based modeling (e.g., LSTM) to capture temporal anomalies.
-4. Add additional tests for edge cases.
+- Fix and validate the `merchant_novelty` feature in `src/features.py`.
+- Engineer a "burst-start" feature to identify the first transaction in a rapid sequence.
+- Evaluate sequence-based approaches, such as LSTM models, for capturing temporal anomaly patterns.
+- Expand testing to cover additional temporal and edge-case scenarios.
