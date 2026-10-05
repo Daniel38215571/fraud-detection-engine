@@ -1,0 +1,8 @@
+{
+  "precision": 0.7795,
+  "recall": 0.8837,
+  "f1": 0.8283,
+  "auc_roc": 0.9422,
+  "test_size": 2072,
+  "fraud_in_test": 172
+}
