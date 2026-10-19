@@ -6,7 +6,7 @@ from datetime import datetime
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from typing import List
-
+from dotenv import load_dotenv
 BASE = "/content/fraud-detection-engine"
 sys.path.insert(0, BASE + "/src")
 
